@@ -129,6 +129,36 @@ float getDateMF(matrixF *mf, int fil,int col){
 	return date;
 }
 
+int countFil(matrixF *mf){
+	int length = 1;
+	while (mf->down != NULL){
+		length = length + 1;
+		mf = downMF(mf);
+	}
+	mf = startUpMF(mf);
+	return length;
+}
+
+int countColumn(matrixF *mf){
+	int length = 1;
+	while (mf->right != NULL){
+		length = length + 1;
+		mf = rightMF(mf);
+	}
+	mf = startLeftMF(mf);
+	return length;
+}
+
+matrixF *amplifyMF(matrixF *mf){
+	matrixF *newMF = createMF(countFil(mf) + 2, countColumn(mf) + 2);
+	for (int fil = 0; fil < countFil(mf); fil++){
+		for (int col = 0; col < countColumn(mf); col++){
+			newMF = setDateMF(newMF, fil + 1, col + 1, getDateMF(mf, fil,col));
+		}
+	}
+	return newMF;
+}
+
 /*struct matrixF{
 	float **matrix;
 	int width;
