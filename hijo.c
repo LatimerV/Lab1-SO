@@ -72,8 +72,8 @@ matrixF *pooling(matrixF *mf){
 			float max = 0.0000;
 			for (int y = 0; y < 2; y++){
 				for (int x = 0; x < 2; x++){
-					if (max > getDateMF(mf,y,x)){
-						max = getDateMF(mf,y,x);
+					if (max > getDateMF(mf, y, x)){
+						max = getDateMF(mf, y, x);
 					}
 				}
 			}
@@ -88,5 +88,19 @@ matrixF *pooling(matrixF *mf){
 }
 
 int classification(matrixF *mf, int umbral){
-	
+	int maxBlack = 0;
+	for (int y = 0; y < countFil(mf); y++){
+		for (int x = 0; x < countColumn(mf); x++){
+			if ((getDateMF(mf, y, x) < 1.0000) && (getDateMF(mf, y, x) >= 0.0000)){
+				maxBlack = maxBlack + 1;
+			}
+		}
+	}
+	float porcentBlack = (maxBlack * 100.0000)/(countFil(mf) * countColumn(mf));
+	if (porcentBlack >= umbral){
+		return 1;
+	}
+	else{
+		return 0;
+	}
 }
