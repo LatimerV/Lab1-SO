@@ -8,5 +8,7 @@
 #include "listf.h"
 
 matrixF *bidirectionalConvolution(matrixF *mf, matrixF *filter){
-	
+	if ((countFil(filter) == countColumn(filter))&&(countFil(filter)%3==0)){
+		
+	}
 }

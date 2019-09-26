@@ -153,7 +153,17 @@ matrixF *amplifyMF(matrixF *mf){
 	matrixF *newMF = createMF(countFil(mf) + 2, countColumn(mf) + 2);
 	for (int fil = 0; fil < countFil(mf); fil++){
 		for (int col = 0; col < countColumn(mf); col++){
-			newMF = setDateMF(newMF, fil + 1, col + 1, getDateMF(mf, fil,col));
+			newMF = setDateMF(newMF, fil + 1, col + 1, getDateMF(mf, fil, col));
+		}
+	}
+	return newMF;
+}
+
+matrixF *decreaseMF(matrixF *mf){
+	matrixF *newMF = createMF(countFil(mf) - 2, countColumn(mf) - 2);
+	for (int fil = 0; fil < countFil(newMF); fil++){
+		for (int col = 0; col < countColumn(newMF); col++){
+			newMF = setDateMF(newMF, fil, col, getDateMF(mf, fil + 1, col + 1));
 		}
 	}
 	return newMF;
