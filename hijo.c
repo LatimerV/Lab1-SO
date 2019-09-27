@@ -45,6 +45,9 @@ matrixF *rectification(matrixF *mf){
 			if (getDateMF(mf,y,x) < 0.0000){
 				mf = setDateMF(mf, y, x, 0.0000);
 			}
+			if (getDateMF(mf,y,x) > 255.0000){
+				mf = setDateMF(mf, y, x, 255.0000);
+			}
 		}
 	}
 	return mf;
@@ -87,20 +90,21 @@ matrixF *pooling(matrixF *mf){
 	return newmf;
 }
 
-int classification(matrixF *mf, int umbral){
+int classification(matrixF *mf, int umbral, char *namefile){
 	int maxBlack = 0;
 	for (int y = 0; y < countFil(mf); y++){
 		for (int x = 0; x < countColumn(mf); x++){
-			if ((getDateMF(mf, y, x) < 1.0000) && (getDateMF(mf, y, x) >= 0.0000)){
+			if (getDateMF(mf, y, x) == 0.0000){
 				maxBlack = maxBlack + 1;
 			}
 		}
 	}
 	float porcentBlack = (maxBlack * 100.0000)/(countFil(mf) * countColumn(mf));
 	if (porcentBlack >= umbral){
-		return 1;
+		printf("|   %s   |         yes        |\n",namefile);
 	}
 	else{
-		return 0;
+		printf("|   %s   |         no         |\n",namefile);
 	}
+	return 0;
 }
