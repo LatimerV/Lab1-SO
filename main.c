@@ -56,6 +56,7 @@ int main(int argc, char *argv[]){
     numeroImagenes = atoi(cflag);
   	umbralClasificacion[0] = atoi(nflag);
 
+  	printf("\n|     Imagen     |     Nearly Black     |\n");
   	while(numeroImagenes>0){ /*Se ejecuta while miestras sea numeroImagenes>0*/
 	    char cantidadImg[10];
 	    sprintf(cantidadImg,"%d",numeroImagenes); 

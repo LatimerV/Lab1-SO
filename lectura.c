@@ -107,6 +107,7 @@ int main(int argc, char *argv[]){
     read(3,imagenArchivo,sizeof(imagenArchivo));
     read(4,umbralClasificacion,sizeof(umbralClasificacion));
     read(5, nombreFiltroConvolucion,sizeof(nombreFiltroConvolucion) );
+
     leerPNG(imagenArchivo, lf, width, height, color_type, bit_depth, row_pointers);
     
     close(pImagen[0]);

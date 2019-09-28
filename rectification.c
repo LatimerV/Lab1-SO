@@ -20,3 +20,8 @@ matrixF *rectification(matrixF *mf){
 	}
 	return mf;
 }
+
+int main(int argc, char *argv[]){
+	
+
+}

@@ -65,3 +65,9 @@ int classification(matrixF *mf, int umbral, char *namefile){
 	escribirPNG(mf, namefile);
 	return 0;
 }
+
+
+int main(int argc, char *argv[]){
+  
+
+}
