@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <getopt.h>
+#include <sys/types.h>
 #include <unistd.h>
 #include <sys/wait.h>
 //#include "funct.h"
@@ -14,7 +15,7 @@ int main(int argc, char *argv[]){
     char *mflag = (char*)malloc(100*sizeof(char));
     char *nflag = (char*)malloc(100*sizeof(char));
     int numeroImagenes=0;
-    int umbralClasificacion =0;
+    int umbralClasificacion[1];
 
     int pUmbral[2];
     int pNombre[2];
@@ -53,12 +54,12 @@ int main(int argc, char *argv[]){
 
 
     numeroImagenes = atoi(cflag);
-  	umbralClasificacion = atoi(nflag);
+  	umbralClasificacion[0] = atoi(nflag);
 
   	while(numeroImagenes>0){ /*Se ejecuta while miestras sea numeroImagenes>0*/
 	    char cantidadImg[10];
 	    sprintf(cantidadImg,"%d",numeroImagenes); 
-	    char nombreFiltroConvolucion[] = mflag; /*Archivo para la etapa de convolucion*/
+	    char *nombreFiltroConvolucion= mflag; /*Archivo para la etapa de convolucion*/
 	    char imagenArchivo[] = "imagen_"; /*Archivo de entrada imagenes*/
 	    char extension[] = ".png"; /*Extension de imagen*/
 	    strcat(imagenArchivo,cantidadImg); /*imagen_1*/
@@ -80,7 +81,7 @@ int main(int argc, char *argv[]){
 	      	write(pUmbral[1],umbralClasificacion,sizeof(umbralClasificacion));
 	      	close(pFiltroConvolucion[0]); /*Se cierra la lectura*/
 	      	write(pFiltroConvolucion[1], nombreFiltroConvolucion, (strlen(nombreFiltroConvolucion)+1));
-	      	waitpid(pid,status,0);
+	      	waitpid(pid,&status,0);
 
 	    }else{/*Es hijo*/
 	      	close(pNombre[1]); /*Se cierra la escritura*/

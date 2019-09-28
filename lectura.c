@@ -3,8 +3,11 @@
 #include <stdint.h>
 #include <string.h>
 #include <png.h>
+#include <ctype.h>
 #include <math.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include "matrixf.h"
 #include "listf.h"
 
@@ -80,7 +83,7 @@ int main(int argc, char *argv[]){
 
   char imagenArchivo[40]; /*Nombre del archivo imagen_1.png*/
   char nombreFiltroConvolucion[40]; /*filtro.txt*/
-  int umbralClasificacion=0; /*numero del umbral*/
+  int umbralClasificacion[1]; /*numero del umbral*/
 
   pid_t pid;
   int status;
@@ -118,7 +121,7 @@ int main(int argc, char *argv[]){
     close(pFiltroConvolucion[0]);
     write(pFiltroConvolucion[1],nombreFiltroConvolucion,(strlen(nombreFiltroConvolucion)+1));
 
-    waitpid(pid,status,0);
+    waitpid(pid,&status,0);
 
   }else{ /*Es el hijo*/
 
