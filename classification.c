@@ -3,8 +3,12 @@
 #include <stdint.h>
 #include <string.h>
 #include <png.h>
+#include <ctype.h>
 #include <math.h>
-#include "matrix.h"
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include "matrixf.h"
 #include "listf.h"
 
 void escribirPNG(char *filename, matrixF *mf) {
@@ -68,6 +72,41 @@ int classification(matrixF *mf, int umbral, char *namefile){
 
 
 int main(int argc, char *argv[]){
+
+  /* matrixf clasfication;
+  aqui iria la matriz para guardar el clasification*/ 
+
+  char imagenArchivo[40]; /*Nombre del archivo imagen_1.png*/
+  int umbralClasificacion[1]; /*numero del umbral*/
+
+  pid_t pid;
+  int status;
+
+
+  int pUmbral[2]; /*para pasar el umbral para clasificacion*/
+  int pNombre[2]; /*Para pasar nombre imagen_1.png*/
+  //int pFiltroConvolucion[2]; /*para pasar filtro.txt*/
+  int pImagen[2]; /*para pasar la imagen de pooling*/
+  /*Se crean los pipes*/
+  //pipe(pFiltroConvolucion);
+  pipe(pUmbral);
+  pipe(pNombre);
+  pipe(pImagen);
+  
+
+
+  read(3,imagenArchivo,sizeof(imagenArchivo));
+  read(4,umbralClasificacion,sizeof(umbralClasificacion));
+  /*falta aqui read de la imagen desde pooling*/
+  //read(5, nombreFiltroConvolucion,sizeof(nombreFiltroConvolucion) );
+
+    /*classification(matrixF *mf, int umbral, char *namefile)*/
+  
+
+
+    return 0;
+
+
   
 
 }

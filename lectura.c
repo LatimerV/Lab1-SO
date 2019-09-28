@@ -126,11 +126,11 @@ int main(int argc, char *argv[]){
 
   }else{ /*Es el hijo*/
 
-    close(pImagen[1]);
-    dup2(pImagen[0],3);
-    
     close(pNombre[1]);
-    dup2(pNombre[0],4);
+    dup2(pNombre[0],3);
+
+    close(pImagen[1]);
+    dup2(pImagen[0],4);
 
     close(pUmbral[1]);
     dup2(pUmbral[0],5);
