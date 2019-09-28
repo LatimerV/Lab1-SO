@@ -13,8 +13,8 @@
 
 
 matrixF *rectification(matrixF *mf){
-	for (int y = 0; y < countFil(filter); y++){
-		for (int x = 0; x < countColumn(filter); x++){
+	for (int y = 0; y < countFil(mf); y++){
+		for (int x = 0; x < countColumn(mf); x++){
 			if (getDateMF(mf,y,x) < 0.0000){
 				mf = setDateMF(mf, y, x, 0.0000);
 			}

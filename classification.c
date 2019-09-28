@@ -13,7 +13,7 @@
 
 void escribirPNG(char *filename, matrixF *mf) {
   int y;
-  FILE *filepng = fopen(nombre, "rb");
+  FILE *filepng = fopen(filename, "rb");
   png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
   png_infop info = png_create_info_struct(png);
   png_init_io(png, filepng);
@@ -34,15 +34,18 @@ void escribirPNG(char *filename, matrixF *mf) {
   png_read_image(png, row_pointers);
   for(int y = 0; y < countFil(mf); y++) {
     for(int x = 0; x < countColumn(mf); x++) {
-      row_pointers[y][x * 4][0] = getDateMF(mf, y, x);
+      /*row_pointers[y][x * 4][0] = getDateMF(mf, y, x);
 	  row_pointers[y][x * 4][1] = getDateMF(mf, y, x);
-	  row_pointers[y][x * 4][2] = getDateMF(mf, y, x);
+	  row_pointers[y][x * 4][2] = getDateMF(mf, y, x);*/
+	  (&(row_pointers[y][x * 4]))[0] = (int)getDateMF(mf, y, x);
+	  (&(row_pointers[y][x * 4]))[1] = (int)getDateMF(mf, y, x);
+	  (&(row_pointers[y][x * 4]))[2] = (int)getDateMF(mf, y, x);
     }
   }
   png_write_info(png, info);  
   png_write_image(png, row_pointers);
   png_write_end(png, NULL); 
-  for(int y = 0; y < height; y++) {
+  for(int y = 0; y < countFil(mf); y++) {
     free(row_pointers[y]);
   }
   free(row_pointers);
@@ -63,10 +66,10 @@ int classification(matrixF *mf, int umbral, char *namefile){
 	if (porcentBlack >= umbral){
 		printf("|   %s   |         yes        |\n",namefile);
 	}
-	if {
+	if (porcentBlack < umbral){
 		printf("|   %s   |         no         |\n",namefile);
 	}
-	escribirPNG(mf, namefile);
+	escribirPNG(namefile, mf);
 	return 0;
 }
 
