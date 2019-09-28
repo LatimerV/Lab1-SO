@@ -32,7 +32,7 @@ matrixF *grayScale(png_bytep *row_pointers, int height, int width) {
   return mf;
 }
 
-void leerPNG(char *nombre, listF *lf, int width, int height, png_byte color_type,
+void leerPNG(char *nombre, matrixF *mf, int width, int height, png_byte color_type,
 			  png_byte bit_depth, png_bytep *row_pointers) {
   FILE *archivo = fopen(nombre, "rb");
   png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -51,11 +51,10 @@ void leerPNG(char *nombre, listF *lf, int width, int height, png_byte color_type
   png_read_image(png, row_pointers);
   fclose(archivo);
   png_destroy_read_struct(&png, &info, NULL);
-  matrixF *mf = grayScale(row_pointers, height, width);
-  lf = insertLF(lf, mf, longLF(lf));
+  mf = grayScale(row_pointers, height, width);
+  return mf;
   //return lf;
 }
-
 /*
 int main(int argc, char *argv[]) {
   int width, height;
