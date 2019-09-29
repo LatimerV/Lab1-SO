@@ -1,4 +1,8 @@
 padre: main.c lectura.c bidireccionalConvolution.c -lpng
-	gcc -o main main.c -I.
-	gcc -o lectura lectura.c -I.
+	gcc main.c -o main -I.
+	gcc lectura.c -o lectura -lpng -I.
+	gcc bidireccionalConvolution.c -o bidireccionalConvolution -I.
+	gcc rectification.c -o rectification -I.
+	gcc pooling.c -o pooling -I.
+	gcc classification.c -o classification -lpng -I.
 

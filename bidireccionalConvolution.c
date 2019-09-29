@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#include <png.h>
 #include <ctype.h>
 #include <math.h>
 #include <unistd.h>
@@ -46,7 +45,7 @@ matrixF *bidirectionalConvolution(matrixF *mf, matrixF *filter){
 
 
 int main(int argc, char *argv[]){
-
+  printf("\n bidirectionalConvolution\n");
   /*matrixf convolucion;
   aqui iria la matriz para guardar la convolucion*/	
   matrixF *filter;
@@ -85,7 +84,7 @@ int main(int argc, char *argv[]){
     read(5,umbralClasificacion,sizeof(umbralClasificacion));
     read(6, filter,sizeof(filter));
 
-    printf("convolucion");
+    printf("convolucion padre\n");
 
     salida=bidirectionalConvolution(entrada,filter);
     
@@ -117,7 +116,7 @@ int main(int argc, char *argv[]){
 
 
 
-    char *argvHijo[] = {"rectifications",NULL};
+    char *argvHijo[] = {"rectification",NULL};
     execv(argvHijo[0],argvHijo);
   }
     return 0;

@@ -74,7 +74,7 @@ void classification(matrixF *mf, int umbral, char *namefile){
 
 
 int main(int argc, char *argv[]){
-
+  printf("\n classification\n");
   /* matrixf clasfication;
   aqui iria la matriz para guardar el clasification*/ 
   matrixF *entrada;

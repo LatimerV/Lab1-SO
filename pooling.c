@@ -50,7 +50,7 @@ matrixF *pooling(matrixF *mf){
 
 
 int main(int argc, char *argv[]){
-
+  printf("\n pooling\n");
 	/* matrixf poolong;
 	aqui iria la matriz para guardar el pooling*/	
 

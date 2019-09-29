@@ -27,7 +27,7 @@ matrixF *rectification(matrixF *mf){
 }
 
 int main(int argc, char *argv[]){
-
+  printf("\n rectification\n");
 	/* matrixf rectificacion;
 	aqui iria la matriz para guardar la rectificacion*/	
 
@@ -56,14 +56,11 @@ int main(int argc, char *argv[]){
   
   /*Es el padre*/
   if(pid>0){
-
     read(3,imagenArchivo,sizeof(imagenArchivo));
     read(4,umbralClasificacion,sizeof(umbralClasificacion));
     /*falta aqui read de la imagen desde convolucion*/
     read(5, entrada,sizeof(matrixF) );
-
-    printf("rectification");
-
+    printf("rectification padre\n");
     salida=rectification(entrada);
     
     

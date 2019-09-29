@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
 
 
 int main(int argc, char *argv[]){
-
+  printf("\n lectura\n");
   matrixF *filter;
   matrixF *entrada;
   matrixF *salida;
@@ -103,8 +103,7 @@ int main(int argc, char *argv[]){
     read(3,imagenArchivo,sizeof(imagenArchivo));
     read(4,umbralClasificacion,sizeof(umbralClasificacion));
     read(5, filter,sizeof(filter) );
-
-    printf("Lectura:");
+	printf("lectura padre\n");
     
 
     salida=leerPNG(imagenArchivo, entrada, width, height, color_type, bit_depth, row_pointers);
