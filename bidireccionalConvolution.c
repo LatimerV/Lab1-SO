@@ -85,13 +85,15 @@ int main(int argc, char *argv[]){
     read(5,umbralClasificacion,sizeof(umbralClasificacion));
     read(6, filter,sizeof(filter));
 
+    printf("convolucion");
+
     salida=bidirectionalConvolution(entrada,filter);
     
     
     /*Para pasar la imagen resultante de convolucion*/
 
     close(pImagen[0]);
-    write(pImagen[1],salida,sizeof(matrixF));
+    write(pImagen[1],&salida,sizeof(matrixF));
 
     close(pNombre[0]);
     write(pNombre[1],imagenArchivo,(strlen(imagenArchivo)+1));
@@ -115,7 +117,7 @@ int main(int argc, char *argv[]){
 
 
 
-    char *argvHijo[] = {"rectification",NULL};
+    char *argvHijo[] = {"rectifications",NULL};
     execv(argvHijo[0],argvHijo);
   }
     return 0;

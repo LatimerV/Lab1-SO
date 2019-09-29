@@ -85,6 +85,9 @@ int main(int argc, char *argv[]){
     /*falta aqui read de la imagen desde rectification*/
     read(5, entrada,sizeof(matrixF) );
 
+    printf("%d\n", umbralClasificacion[0]);
+    printf("%s\n", imagenArchivo);
+
     salida=pooling(entrada);
     
     

@@ -62,6 +62,8 @@ int main(int argc, char *argv[]){
     /*falta aqui read de la imagen desde convolucion*/
     read(5, entrada,sizeof(matrixF) );
 
+    printf("rectification");
+
     salida=rectification(entrada);
     
     

@@ -104,13 +104,14 @@ int main(int argc, char *argv[]){
     read(4,umbralClasificacion,sizeof(umbralClasificacion));
     read(5, filter,sizeof(filter) );
 
+    printf("Lectura:");
     
 
     salida=leerPNG(imagenArchivo, entrada, width, height, color_type, bit_depth, row_pointers);
     
 
     close(pImagen[0]);
-    write(pImagen[1],salida,sizeof(matrixF));
+    write(pImagen[1],&salida,sizeof(matrixF));
 
     close(pNombre[0]);
     write(pNombre[1],imagenArchivo,(strlen(imagenArchivo)+1));
@@ -119,7 +120,7 @@ int main(int argc, char *argv[]){
     write(pUmbral[1],umbralClasificacion,sizeof(umbralClasificacion));
 
     close(pFiltroConvolucion[0]);
-    write(pFiltroConvolucion[1],filter,sizeof(matrixF));
+    write(pFiltroConvolucion[1],&filter,sizeof(matrixF));
 
     waitpid(pid,&status,0);
 
@@ -139,7 +140,7 @@ int main(int argc, char *argv[]){
 
 
 
-    char *argvHijo[] = {"bidirectionalConvolution",NULL};
+    char *argvHijo[] = {"bidireccionalConvolution",NULL};
     execv(argvHijo[0],argvHijo);
   }
     return 0;
