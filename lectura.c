@@ -23,12 +23,6 @@ matrixF *grayScale(png_bytep *row_pointers, int height, int width) {
 	  mf = setDateMF(mf, y, x, prom);
     }
   }
-  for (int a = 0; a < height; a++){
-	for (int b = 0; b < width; b++){
-		printf("%f ",getDateMF(mf, a, b));
-	}
-	printf("\n");
-  }
   return mf;
 }
 
