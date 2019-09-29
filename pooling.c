@@ -54,6 +54,9 @@ int main(int argc, char *argv[]){
 	/* matrixf poolong;
 	aqui iria la matriz para guardar el pooling*/	
 
+  matrixF *entrada;
+  matrixF *salida;	
+
   char imagenArchivo[40]; /*Nombre del archivo imagen_1.png*/
   int umbralClasificacion[1]; /*numero del umbral*/
 
@@ -80,14 +83,14 @@ int main(int argc, char *argv[]){
     read(3,imagenArchivo,sizeof(imagenArchivo));
     read(4,umbralClasificacion,sizeof(umbralClasificacion));
     /*falta aqui read de la imagen desde rectification*/
-    //read(5, nombreFiltroConvolucion,sizeof(nombreFiltroConvolucion) );
+    read(5, entrada,sizeof(matrixF) );
 
-    /*pooling(matrixF *mf)*/
+    salida=pooling(entrada);
     
     
-    /*Para pasar la imagen resultante de pooling
+    /*Para pasar la imagen resultante de pooling*/
     close(pImagen[0]);
-    write(pImagen[1],lf,sizeof(listF));*/
+    write(pImagen[1],salida,sizeof(matrixF));
 
     close(pNombre[0]);
     write(pNombre[1],imagenArchivo,(strlen(imagenArchivo)+1));
@@ -106,9 +109,9 @@ int main(int argc, char *argv[]){
     close(pUmbral[1]);
     dup2(pUmbral[0],4);
 
-     /*Para que el hijo (classification) lea desde 5, la iamgen de pooling
+     /*Para que el hijo (classification) lea desde 5, la iamgen de pooling*/
     close(pImagen[1]);
-    dup2(pImagen[0],5);*/
+    dup2(pImagen[0],5);
 
 
 

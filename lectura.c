@@ -32,8 +32,8 @@ matrixF *grayScale(png_bytep *row_pointers, int height, int width) {
   return mf;
 }
 
-void leerPNG(char *nombre, matrixF *mf, int width, int height, png_byte color_type,
-			  png_byte bit_depth, png_bytep *row_pointers) {
+matrixF* leerPNG(char *nombre, matrixF *mf, int width, int height, png_byte color_type,
+  png_byte bit_depth, png_bytep *row_pointers) {
   FILE *archivo = fopen(nombre, "rb");
   png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
   png_infop info = png_create_info_struct(png);
@@ -74,7 +74,10 @@ int main(int argc, char *argv[]) {
 
 int main(int argc, char *argv[]){
 
-  listF *lf = createLF(NULL); /*Imagen Png*/
+  matrixF *filter;
+  matrixF *entrada;
+  matrixF *salida;
+  
   int width, height;
   png_byte color_type;
   png_byte bit_depth;
@@ -90,7 +93,7 @@ int main(int argc, char *argv[]){
 
   int pUmbral[2]; /*para pasar el umbral para clasificacion*/
   int pNombre[2]; /*Para pasar nombre imagen_1.png*/
-  int pFiltroConvolucion[2]; /*para pasar filtro.txt*/
+  int pFiltroConvolucion[2]; /*para pasar matrixFfiltro*/
   int pImagen[2]; /*para pasar la imagen de lectura*/
   /*Se crean los pipes*/
   pipe(pFiltroConvolucion);
@@ -105,12 +108,15 @@ int main(int argc, char *argv[]){
   if(pid>0){
     read(3,imagenArchivo,sizeof(imagenArchivo));
     read(4,umbralClasificacion,sizeof(umbralClasificacion));
-    read(5, nombreFiltroConvolucion,sizeof(nombreFiltroConvolucion) );
+    read(5, filter,sizeof(filter) );
 
-    leerPNG(imagenArchivo, lf, width, height, color_type, bit_depth, row_pointers);
     
+
+    salida=leerPNG(imagenArchivo, entrada, width, height, color_type, bit_depth, row_pointers);
+    
+
     close(pImagen[0]);
-    write(pImagen[1],lf,sizeof(listF));
+    write(pImagen[1],salida,sizeof(matrixF));
 
     close(pNombre[0]);
     write(pNombre[1],imagenArchivo,(strlen(imagenArchivo)+1));
@@ -119,7 +125,7 @@ int main(int argc, char *argv[]){
     write(pUmbral[1],umbralClasificacion,sizeof(umbralClasificacion));
 
     close(pFiltroConvolucion[0]);
-    write(pFiltroConvolucion[1],nombreFiltroConvolucion,(strlen(nombreFiltroConvolucion)+1));
+    write(pFiltroConvolucion[1],filter,sizeof(matrixF));
 
     waitpid(pid,&status,0);
 
@@ -128,7 +134,7 @@ int main(int argc, char *argv[]){
     close(pNombre[1]);
     dup2(pNombre[0],3);
 
-    close(pImagen[1]);
+    close(pImagen[1]); /*Imagen resultantes de lectura*/
     dup2(pImagen[0],4);
 
     close(pUmbral[1]);

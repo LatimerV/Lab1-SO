@@ -49,9 +49,14 @@ int main(int argc, char *argv[]){
 
   /*matrixf convolucion;
   aqui iria la matriz para guardar la convolucion*/	
+  matrixF *filter;
+  matrixF *entrada;
+  matrixF *salida;
+
+
 
   char imagenArchivo[40]; /*Nombre del archivo imagen_1.png*/
-  char nombreFiltroConvolucion[40]; /*filtro.txt*/
+  //char nombreFiltroConvolucion[40]; /*filtro.txt*/
   int umbralClasificacion[1]; /*numero del umbral*/
 
   pid_t pid;
@@ -63,7 +68,7 @@ int main(int argc, char *argv[]){
   //int pFiltroConvolucion[2]; /*para pasar filtro.txt*/
   int pImagen[2]; /*para pasar la imagen de convolucion*/
   /*Se crean los pipes*/
-  //pipe(pFiltroConvolucion);
+  //pipe(pFiltroConvolucion); No se tiene que pasar, porque aqui se ocupa
   pipe(pNombre);
   pipe(pUmbral);
   pipe(pImagen);
@@ -75,16 +80,18 @@ int main(int argc, char *argv[]){
   if(pid>0){
 
     read(3,imagenArchivo,sizeof(imagenArchivo));
+    read(4, entrada, sizeof(entrada));
     /*falta aqui read de la imagen desde lectura desde 4*/
     read(5,umbralClasificacion,sizeof(umbralClasificacion));
-   
-    //read(6, nombreFiltroConvolucion,sizeof(nombreFiltroConvolucion) );
-    /*bidirectionalConvolution(matrixF *mf, matrixF *filter)*/
+    read(6, filter,sizeof(filter));
+
+    salida=bidirectionalConvolution(entrada,filter);
     
     
-    /*Para pasar la imagen resultante de convolucion
+    /*Para pasar la imagen resultante de convolucion*/
+
     close(pImagen[0]);
-    write(pImagen[1],lf,sizeof(listF));*/
+    write(pImagen[1],salida,sizeof(matrixF));
 
     close(pNombre[0]);
     write(pNombre[1],imagenArchivo,(strlen(imagenArchivo)+1));
@@ -102,9 +109,9 @@ int main(int argc, char *argv[]){
     close(pUmbral[1]);
     dup2(pUmbral[0],4);
 
-    /*Para que el hijo lea desde 5, la iamgen de convolucion
+    /*Para que el hijo lea desde 5, la iamgen de convolucion*/
     close(pImagen[1]);
-    dup2(pImagen[0],5);*/
+    dup2(pImagen[0],5);
 
 
 

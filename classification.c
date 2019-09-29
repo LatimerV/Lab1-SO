@@ -53,7 +53,7 @@ void escribirPNG(char *filename, matrixF *mf) {
   png_destroy_write_struct(&png, &info);
 }
 
-int classification(matrixF *mf, int umbral, char *namefile){
+void classification(matrixF *mf, int umbral, char *namefile){
 	int maxBlack = 0;
 	for (int y = 0; y < countFil(mf); y++){
 		for (int x = 0; x < countColumn(mf); x++){
@@ -70,7 +70,6 @@ int classification(matrixF *mf, int umbral, char *namefile){
 		printf("|   %s   |         no         |\n",namefile);
 	}
 	escribirPNG(namefile, mf);
-	return 0;
 }
 
 
@@ -78,6 +77,8 @@ int main(int argc, char *argv[]){
 
   /* matrixf clasfication;
   aqui iria la matriz para guardar el clasification*/ 
+  matrixF *entrada;
+  matrixF *salida;
 
   char imagenArchivo[40]; /*Nombre del archivo imagen_1.png*/
   int umbralClasificacion[1]; /*numero del umbral*/
@@ -95,19 +96,21 @@ int main(int argc, char *argv[]){
   pipe(pUmbral);
   pipe(pNombre);
   pipe(pImagen);
+
+  
   
 
 
   read(3,imagenArchivo,sizeof(imagenArchivo));
   read(4,umbralClasificacion,sizeof(umbralClasificacion));
   /*falta aqui read de la imagen desde pooling*/
-  //read(5, nombreFiltroConvolucion,sizeof(nombreFiltroConvolucion) );
+  read(5, entrada,sizeof(matrixF) );
 
-    /*classification(matrixF *mf, int umbral, char *namefile)*/
+  classification(entrada, umbralClasificacion[0],imagenArchivo );
   
 
 
-    return 0;
+  return 0;
 
 
   

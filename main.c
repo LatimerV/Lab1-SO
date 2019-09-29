@@ -113,13 +113,17 @@ int main(int argc, char *argv[]){
 	}
 	rewind(filefilter);
 	fclose(filefilter);
-	matrixF *filter = convertFilter(datefilter, cont - 1);
+	matrixF *filter = convertFilter(datefilter, cont - 1); 
+	/*Este se pasa por el pipe como filtro de convolucion en forma de matrixF*/
+	
     if(aux == 1){
     }
 
 
     numeroImagenes = atoi(cflag);
   	umbralClasificacion[0] = atoi(nflag);
+
+
 
   	printf("\n|     Imagen     |     Nearly Black     |\n");
   	while(numeroImagenes>0){ /*Se ejecuta while miestras sea numeroImagenes>0*/
@@ -134,7 +138,7 @@ int main(int argc, char *argv[]){
 	    /*Se crean los pipes*/
 	    pipe(pNombre); /*Para pasar el nombreImagen.*/
 	    pipe(pUmbral); /*Para pasar el umbral para clasificacion.*/
-	    pipe(pFiltroConvolucion); /*Para pasar el nombreFiltroConvolucion.*/
+	    pipe(pFiltroConvolucion); /*Para pasar el matrifxFiltroConvolucion.*/
 	    
 	    /*Se crea el proceso hijo*/
 	    pid = fork();
@@ -146,7 +150,7 @@ int main(int argc, char *argv[]){
 	      	close(pUmbral[0]); /*Se cierra la lectura*/
 	      	write(pUmbral[1],umbralClasificacion,sizeof(umbralClasificacion));
 	      	close(pFiltroConvolucion[0]); /*Se cierra la lectura*/
-	      	write(pFiltroConvolucion[1], nombreFiltroConvolucion, (strlen(nombreFiltroConvolucion)+1));
+	      	write(pFiltroConvolucion[1], filter, sizeof(filter));
 	      	waitpid(pid,&status,0);
 
 	    }else{/*Es hijo*/
@@ -156,6 +160,7 @@ int main(int argc, char *argv[]){
 	      	dup2(pUmbral[0],4);
 	      	close(pFiltroConvolucion[1]); /*Se cierra escritura*/
 	      	dup2(pFiltroConvolucion[0], 5);
+	      	
 	      	char *argvHijo[] = {"lectura",NULL}; /*Nombre del archivo al cual pasara el hijo*/
 	      	execv(argvHijo[0],argvHijo); /*Reemplaza el codigo del proceso, por el cual apunta argvHijo*/
 	    }

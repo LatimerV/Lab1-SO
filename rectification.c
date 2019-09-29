@@ -31,6 +31,9 @@ int main(int argc, char *argv[]){
 	/* matrixf rectificacion;
 	aqui iria la matriz para guardar la rectificacion*/	
 
+  matrixF *entrada;
+  matrixF *salida;
+
   char imagenArchivo[40]; /*Nombre del archivo imagen_1.png*/
   int umbralClasificacion[1]; /*numero del umbral*/
 
@@ -57,14 +60,14 @@ int main(int argc, char *argv[]){
     read(3,imagenArchivo,sizeof(imagenArchivo));
     read(4,umbralClasificacion,sizeof(umbralClasificacion));
     /*falta aqui read de la imagen desde convolucion*/
-    //read(5, nombreFiltroConvolucion,sizeof(nombreFiltroConvolucion) );
+    read(5, entrada,sizeof(matrixF) );
 
-    /*rectification(matrixF *mf)*/
+    salida=rectification(entrada);
     
     
-    /*Para pasar la imagen resultante de rectification
+    /*Para pasar la imagen resultante de rectification*/
     close(pImagen[0]);
-    write(pImagen[1],lf,sizeof(listF));*/
+    write(pImagen[1],salida,sizeof(matrixF));
 
     close(pNombre[0]);
     write(pNombre[1],imagenArchivo,(strlen(imagenArchivo)+1));
@@ -83,9 +86,9 @@ int main(int argc, char *argv[]){
     close(pUmbral[1]);
     dup2(pUmbral[0],4);
 
-     /*Para que el hijo (pooling) lea desde 5, la iamgen de rectification
+     /*Para que el hijo (pooling) lea desde 5, la iamgen de rectification*/
     close(pImagen[1]);
-    dup2(pImagen[0],5);*/
+    dup2(pImagen[0],5);
 
 
 
