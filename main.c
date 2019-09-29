@@ -12,12 +12,12 @@
 //#include "structs.h"
 
 matrixF *convertFilter(char **datefilter, int cont){
-	int colfilter = 0;
+	int colfilter = 1;
 	for (int x = 0; x < strlen(datefilter[0]); x++){
-		if ((datefilter[0][x] == '-') && (datefilter[0][x] == '0') && (datefilter[0][x] == '1') 
-			&& (datefilter[0][x] == '2') && (datefilter[0][x] == '3') && (datefilter[0][x] == '4') 
-		&& (datefilter[0][x] == '5') && (datefilter[0][x] == '6') && (datefilter[0][x] == '7') 
-		&& (datefilter[0][x] == '8') && (datefilter[0][x] == '9')){
+		if ((datefilter[0][x] == '-') || (datefilter[0][x] == '0') || (datefilter[0][x] == '1') 
+			|| (datefilter[0][x] == '2') || (datefilter[0][x] == '3') || (datefilter[0][x] == '4') 
+		|| (datefilter[0][x] == '5') || (datefilter[0][x] == '6') || (datefilter[0][x] == '7') 
+		|| (datefilter[0][x] == '8') || (datefilter[0][x] == '9')){
 			colfilter = colfilter + 0;
 		}
 		else if (datefilter[0][x] == ' '){
@@ -29,15 +29,21 @@ matrixF *convertFilter(char **datefilter, int cont){
 	char *digit = (char *)malloc(10*sizeof(char));
 	for (int a = 0; a < cont; a++){
 		col = 0;
-		for (int b = 0; b < colfilter; b++){
-			if ((datefilter[a][b] == '-') && (datefilter[a][b] == '0') && (datefilter[a][b] == '1') 
-			&& (datefilter[a][b] == '2') && (datefilter[a][b] == '3') && (datefilter[a][b] == '4') 
-		&& (datefilter[a][b] == '5') && (datefilter[a][b] == '6') && (datefilter[a][b] == '7') 
-		&& (datefilter[a][b] == '8') && (datefilter[a][b] == '9')){
+		for (int b = 0; b < strlen(datefilter[a]); b++){
+			if ((datefilter[a][b] == '-') || (datefilter[a][b] == '0') || (datefilter[a][b] == '1') 
+			    || (datefilter[a][b] == '2') || (datefilter[a][b] == '3') || (datefilter[a][b] == '4') 
+		        || (datefilter[a][b] == '5') || (datefilter[a][b] == '6') || (datefilter[a][b] == '7') 
+		        || (datefilter[a][b] == '8') || (datefilter[a][b] == '9')){
 			digit[pos] = datefilter[a][b];
+			if (b == strlen(datefilter[a]) - 1){
+				pos = 0;
+				filter = setDateMF(filter, fil, col, (atoi(digit)) * 1.0000);
+				col = col + 1;
+				digit = (char *)malloc(10*sizeof(char));
+			}
 			pos = pos + 1;
 			}
-			else if (datefilter[a][b] == ' '){
+			else if((datefilter[a][b] == ' ') || (b == strlen(datefilter[a]) - 1)){
 				pos = 0;
 				filter = setDateMF(filter, fil, col, (atoi(digit)) * 1.0000);
 				col = col + 1;
@@ -113,7 +119,7 @@ int main(int argc, char *argv[]){
 	}
 	rewind(filefilter);
 	fclose(filefilter);
-	matrixF *filter = convertFilter(datefilter, cont - 1); 
+	matrixF *filter = convertFilter(datefilter, cont); 
 	/*Este se pasa por el pipe como filtro de convolucion en forma de matrixF*/
 	
     if(aux == 1){
@@ -124,7 +130,9 @@ int main(int argc, char *argv[]){
   	umbralClasificacion[0] = atoi(nflag);
 
 
-
+	int pDateMatrix[2];
+	int pFilMatrix[2];
+	int pColMatrix[2];
   	printf("\n|     Imagen     |     Nearly Black     |\n");
   	while(numeroImagenes>0){ /*Se ejecuta while miestras sea numeroImagenes>0*/
 	    char cantidadImg[10];
@@ -139,7 +147,9 @@ int main(int argc, char *argv[]){
 	    pipe(pNombre); /*Para pasar el nombreImagen.*/
 	    pipe(pUmbral); /*Para pasar el umbral para clasificacion.*/
 	    pipe(pFiltroConvolucion); /*Para pasar el matrifxFiltroConvolucion.*/
-	    
+	    pipe(pDateMatrix);
+		pipe(pFilMatrix);
+		pipe(pColMatrix);
 	    /*Se crea el proceso hijo*/
 	    pid = fork();
 	    
@@ -151,7 +161,20 @@ int main(int argc, char *argv[]){
 	      	close(pUmbral[0]); /*Se cierra la lectura*/
 	      	write(pUmbral[1],umbralClasificacion,sizeof(umbralClasificacion));
 	      	close(pFiltroConvolucion[0]); /*Se cierra la lectura*/
-	      	write(pFiltroConvolucion[1], filter, sizeof(filter));
+			close(pDateMatrix[0]);
+			close(pFilMatrix[0]);
+			close(pColMatrix[0]);
+			int filmatrix = countFil(filter);
+			int colmatrix = countColumn(filter);
+			write(pFilMatrix[1], &filmatrix, sizeof(filmatrix));
+			write(pColMatrix[1], &colmatrix, sizeof(colmatrix));
+			for (int y = 0; y < countFil(filter); y++){
+				for (int x = 0; x < countColumn(filter); x++){
+					float datematrix = getDateMF(filter, y, x);
+					write(pDateMatrix[1], &datematrix, sizeof(datematrix));
+				}
+			}
+	      	write(pFiltroConvolucion[1], filter, countFil(filter) * countColumn(filter));
 	      	waitpid(pid,&status,0);
 
 	    }else{/*Es hijo*/
@@ -161,6 +184,13 @@ int main(int argc, char *argv[]){
 	      	dup2(pUmbral[0],4);
 	      	close(pFiltroConvolucion[1]); /*Se cierra escritura*/
 	      	dup2(pFiltroConvolucion[0], 5);
+			
+			close(pDateMatrix[1]);
+	      	dup2(pDateMatrix[0], 7);
+			close(pFilMatrix[1]);
+	      	dup2(pFilMatrix[0], 8);
+			close(pColMatrix[1]);
+	      	dup2(pColMatrix[0], 9);
 	      	
 	      	char *argvHijo[] = {"lectura",NULL}; /*Nombre del archivo al cual pasara el hijo*/
 	      	execv(argvHijo[0],argvHijo); /*Reemplaza el codigo del proceso, por el cual apunta argvHijo*/

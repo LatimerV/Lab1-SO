@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-#include <png.h>
 #include <ctype.h>
 #include <math.h>
 #include <unistd.h>
@@ -47,8 +46,8 @@ int main(int argc, char *argv[]){
   int pImagen[2]; /*para pasar la imagen de rectificacion*/
   /*Se crean los pipes*/
   //pipe(pFiltroConvolucion);
-  pipe(pUmbral);
   pipe(pNombre);
+  pipe(pUmbral);
   pipe(pImagen);
   
   /*Se crea el proceso hijo.*/
@@ -60,13 +59,13 @@ int main(int argc, char *argv[]){
     read(4,umbralClasificacion,sizeof(umbralClasificacion));
     /*falta aqui read de la imagen desde convolucion*/
     read(5, entrada,sizeof(matrixF) );
-    printf("rectification padre\n");
+    printf("rectification padre, umbral: %d y nombre: %s\n", umbralClasificacion[0], imagenArchivo);
     salida=rectification(entrada);
     
     
     /*Para pasar la imagen resultante de rectification*/
     close(pImagen[0]);
-    write(pImagen[1],salida,sizeof(matrixF));
+    write(pImagen[1],&salida,sizeof(matrixF));
 
     close(pNombre[0]);
     write(pNombre[1],imagenArchivo,(strlen(imagenArchivo)+1));

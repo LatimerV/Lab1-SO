@@ -11,12 +11,15 @@
 #include "listf.h"
 
 matrixF *bidirectionalConvolution(matrixF *mf, matrixF *filter){
+	printf("HOLA....\n");
 	if ((countFil(filter) == countColumn(filter))&&(countFil(filter)%2 == 1)){
 		int increase = 0, initial = countFil(filter);
+		printf("HOLA\n");
 		while (initial != 1){
 			initial = initial - 2;
 			increase = increase + 1;
 		}
+		printf("HOLA\n");
 		for (int cont = 0; cont < increase; cont++){
 			mf = amplifyMF(mf);
 		}
@@ -38,6 +41,7 @@ matrixF *bidirectionalConvolution(matrixF *mf, matrixF *filter){
 		return mf;
 	}
 	else{
+		printf("HOLA\n");
 		return mf;
 	}
 }
@@ -84,21 +88,22 @@ int main(int argc, char *argv[]){
     read(5,umbralClasificacion,sizeof(umbralClasificacion));
     read(6, filter,sizeof(filter));
 
-    printf("convolucion padre\n");
-
+    printf("convolucion padre, umbral: %d y nombre: %s\n", umbralClasificacion[0], imagenArchivo);
+	printf("convolucion padre, nombre: %s\n", imagenArchivo);
     salida=bidirectionalConvolution(entrada,filter);
     
     
     /*Para pasar la imagen resultante de convolucion*/
 
-    close(pImagen[0]);
-    write(pImagen[1],&salida,sizeof(matrixF));
-
+	printf("convolucion padre, nombre: %s\n", imagenArchivo);
     close(pNombre[0]);
     write(pNombre[1],imagenArchivo,(strlen(imagenArchivo)+1));
-
+	printf("convolucion padre, nombre: %s\n", imagenArchivo);
     close(pUmbral[0]);
     write(pUmbral[1],umbralClasificacion,sizeof(umbralClasificacion));
+
+	close(pImagen[0]);
+    write(pImagen[1],salida,sizeof(matrixF));
 
     waitpid(pid,&status,0);
 

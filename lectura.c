@@ -72,7 +72,8 @@ int main(int argc, char *argv[]){
   matrixF *entrada;
   matrixF *salida;
   
-  int width, height;
+  int width, height, fil, col;
+  float date;
   png_byte color_type;
   png_byte bit_depth;
   png_bytep *row_pointers = NULL;
@@ -100,23 +101,43 @@ int main(int argc, char *argv[]){
   
   /*Es el padre*/
   if(pid>0){
+	 printf("matriz creada\n");
     read(3,imagenArchivo,sizeof(imagenArchivo));
     read(4,umbralClasificacion,sizeof(umbralClasificacion));
-    read(5, filter,sizeof(filter) );
+	printf("matriz creada\n");
+	read(8, &fil, sizeof(fil));
+	read(9, &col, sizeof(col));
+	printf("matriz creada\n");
+	filter = createMF(fil, col);
+	printf("matriz creada\n");
+	for (int y = 0; y < countFil(filter); y++){
+		for (int x = 0; x < countColumn(filter); x++){
+			read(7, &date, sizeof(date));
+			filter = setDateMF( filter, y, x, date);
+		}
+	}
+    /*read(5, &filter,2000*sizeof(filter));*/
+	for (int y2 = 0; y2 < countFil(filter); y2++){
+		for (int x2 = 0; x2 < countColumn(filter); x2++){
+			printf("%f ",getDateMF(filter,y2,x2));
+		}
+		printf("\n");
+	}
 	printf("lectura padre\n");
     
 
     salida=leerPNG(imagenArchivo, entrada, width, height, color_type, bit_depth, row_pointers);
     
 
-    close(pImagen[0]);
-    write(pImagen[1],&salida,sizeof(matrixF));
 
     close(pNombre[0]);
     write(pNombre[1],imagenArchivo,(strlen(imagenArchivo)+1));
 
     close(pUmbral[0]);
     write(pUmbral[1],umbralClasificacion,sizeof(umbralClasificacion));
+	
+	close(pImagen[0]);
+    write(pImagen[1],salida,sizeof(matrixF));
 
     close(pFiltroConvolucion[0]);
     write(pFiltroConvolucion[1],&filter,sizeof(matrixF));
