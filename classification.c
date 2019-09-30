@@ -9,7 +9,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include "matrixf.h"
-#include "listf.h"
+
 
 void escribirPNG(char *filename, matrixF *mf) {
   FILE *filepng = fopen(filename, "wb");
@@ -121,12 +121,5 @@ int main(int argc, char *argv[]){
   char *imagefile = (char *)malloc(1000*sizeof(char));
   strncpy(imagefile, imagenArchivo, strlen(imagenArchivo) - 4);
   classification(entrada, umbralClasificacion[0],imagefile);
-  
-
-
   return 0;
-
-
-  
-
 }

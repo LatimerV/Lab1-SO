@@ -9,7 +9,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include "matrixf.h"
-#include "listf.h"
+
 
 matrixF *pooling(matrixF *mf){
 	int heigth = 0, width = 0;

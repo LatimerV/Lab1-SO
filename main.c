@@ -7,10 +7,8 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include "matrixf.h"
-#include "listf.h"
-//#include "funct.h"
-//#include "structs.h"
 
+/**/
 matrixF *convertFilter(char **datefilter, int cont){
 	int colfilter = 1;
 	for (int x = 0; x < strlen(datefilter[0]); x++){
@@ -70,14 +68,14 @@ int main(int argc, char *argv[]){
 
     
     int caso, aux=0;
-    while((caso=getopt(argc,argv, "c:m:n:b"))!= -1){
+    while((caso=getopt(argc,argv, "c:f:n:b"))!= -1){
         switch(caso){
             case 'c':
         
                 strcpy(cflag, optarg); /*Numero Cantidad imagenes*/
         
                 break;    
-            case 'm':
+            case 'f':
                 strcpy(mflag, optarg); /*Archivo mascara filtro .txt*/
                 break;  
             
@@ -128,14 +126,14 @@ int main(int argc, char *argv[]){
     numeroImagenes = atoi(cflag);
   	umbralClasificacion[0] = atoi(nflag);
 
-
+	int image = 1;
 	int pDateMatrix[2];
 	int pFilMatrix[2];
 	int pColMatrix[2];
   	printf("\n|     Imagen     |     Nearly Black     |\n");
-  	while(numeroImagenes>0){ /*Se ejecuta while miestras sea numeroImagenes>0*/
+  	while(image <= numeroImagenes){ /*Se ejecuta while miestras sea numeroImagenes>0*/
 	    char cantidadImg[10];
-	    sprintf(cantidadImg,"%d",numeroImagenes); 
+	    sprintf(cantidadImg,"%d",image); 
 	    char *nombreFiltroConvolucion= mflag; /*Archivo para la etapa de convolucion*/
 	    char imagenArchivo[] = "imagen_"; /*Archivo de entrada imagenes*/
 	    char extension[] = ".png"; /*Extension de imagen*/
@@ -188,7 +186,7 @@ int main(int argc, char *argv[]){
 	      	char *argvHijo[] = {"lectura",NULL}; /*Nombre del archivo al cual pasara el hijo*/
 	      	execv(argvHijo[0],argvHijo); /*Reemplaza el codigo del proceso, por el cual apunta argvHijo*/
 	    }
-	      numeroImagenes--;
+	      image++;
   	}/*Fin while*/
 
 

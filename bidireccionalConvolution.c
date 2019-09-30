@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include "matrixf.h"
-#include "listf.h"
+
 
 matrixF *bidirectionalConvolution(matrixF *mf, matrixF *filter){
 	if ((countFil(filter) == countColumn(filter))&&(countFil(filter)%2 == 1)){
