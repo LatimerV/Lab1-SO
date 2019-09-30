@@ -153,7 +153,6 @@ int main(int argc, char *argv[]){
 	    
 	    /*Mayor que 0 es el PADRE*/
 	    if(pid>0){
-			 printf("main padre\n");
 	    	close(pNombre[0]); /*Se cierra la lectura*/
 	      	write(pNombre[1],imagenArchivo,(strlen(imagenArchivo)+1));
 	      	close(pUmbral[0]); /*Se cierra la lectura*/

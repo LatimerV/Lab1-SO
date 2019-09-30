@@ -26,7 +26,6 @@ matrixF *rectification(matrixF *mf){
 }
 
 int main(int argc, char *argv[]){
-  printf("\n rectification\n");
 	/* matrixf rectificacion;
 	aqui iria la matriz para guardar la rectificacion*/	
 
@@ -76,7 +75,6 @@ int main(int argc, char *argv[]){
 			entrada = setDateMF( entrada, y, x, date);
 		}
 	}
-    printf("rectification padre, umbral: %d y nombre: %s\n", umbralClasificacion[0], imagenArchivo);
     salida=rectification(entrada);
     
     

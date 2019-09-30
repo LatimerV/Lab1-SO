@@ -11,15 +11,12 @@
 #include "listf.h"
 
 matrixF *bidirectionalConvolution(matrixF *mf, matrixF *filter){
-	printf("HOLA....\n");
 	if ((countFil(filter) == countColumn(filter))&&(countFil(filter)%2 == 1)){
 		int increase = 0, initial = countFil(filter);
-		printf("HOLA\n");
 		while (initial != 1){
 			initial = initial - 2;
 			increase = increase + 1;
 		}
-		printf("HOLA\n");
 		for (int cont = 0; cont < increase; cont++){
 			mf = amplifyMF(mf);
 		}
@@ -41,7 +38,6 @@ matrixF *bidirectionalConvolution(matrixF *mf, matrixF *filter){
 		return mf;
 	}
 	else{
-		printf("HOLA\n");
 		return mf;
 	}
 }
@@ -49,7 +45,6 @@ matrixF *bidirectionalConvolution(matrixF *mf, matrixF *filter){
 
 
 int main(int argc, char *argv[]){
-  printf("\n bidirectionalConvolution\n");
   /*matrixf convolucion;
   aqui iria la matriz para guardar la convolucion*/	
   matrixF *filter;
@@ -116,10 +111,8 @@ int main(int argc, char *argv[]){
     
     /*Para pasar la imagen resultante de convolucion*/
 
-	printf("convolucion padre, nombre: %s\n", imagenArchivo);
     close(pNombre[0]);
     write(pNombre[1],imagenArchivo,(strlen(imagenArchivo)+1));
-	printf("convolucion padre, nombre: %s\n", imagenArchivo);
     close(pUmbral[0]);
     write(pUmbral[1],umbralClasificacion,sizeof(umbralClasificacion));
 

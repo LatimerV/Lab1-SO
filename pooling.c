@@ -50,7 +50,6 @@ matrixF *pooling(matrixF *mf){
 
 
 int main(int argc, char *argv[]){
-  printf("\n pooling\n");
 	/* matrixf poolong;
 	aqui iria la matriz para guardar el pooling*/	
 
@@ -101,13 +100,7 @@ int main(int argc, char *argv[]){
 			entrada = setDateMF( entrada, y, x, date);
 		}
 	}
-
-    printf("%d\n", umbralClasificacion[0]);
-    printf("%s\n", imagenArchivo);
-
-    salida=pooling(entrada);
-    
-    
+    salida=pooling(entrada);   
     /*Para pasar la imagen resultante de pooling*/
     /*close(pImagen[0]);
     write(pImagen[1],salida,sizeof(matrixF));*/

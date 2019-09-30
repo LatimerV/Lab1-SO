@@ -67,7 +67,6 @@ int main(int argc, char *argv[]) {
 
 
 int main(int argc, char *argv[]){
-  printf("\n lectura\n");
   matrixF *filter;
   matrixF *salida;
   
@@ -122,13 +121,9 @@ int main(int argc, char *argv[]){
 		}
 	}
     /*read(5, &filter,2000*sizeof(filter));*/
-	printf("lectura padre\n");
     
-
     salida=leerPNG(imagenArchivo, salida, width, height, color_type, bit_depth, row_pointers);
     
-
-
     close(pNombre[0]);
     write(pNombre[1],imagenArchivo,(strlen(imagenArchivo)+1));
 
