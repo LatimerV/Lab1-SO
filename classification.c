@@ -10,7 +10,10 @@
 #include <sys/wait.h>
 #include "matrixf.h"
 
-
+// Funcion: EScribe un archivo en formato png, resultante
+// 
+// Entrada: en nombre del archivo y lamatriz resultante.
+// Salida: void
 void escribirPNG(char *filename, matrixF *mf) {
   FILE *filepng = fopen(filename, "wb");
   png_structp png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -53,6 +56,12 @@ void escribirPNG(char *filename, matrixF *mf) {
   fclose(filepng);
   png_destroy_write_struct(&png, &info);
 }
+
+
+// Funcion: Permite clasificar una imagene de acuerdo a un umbral
+// 
+// Entrada: Matriz resultante desde etapa de pooling, umbral ingresado por usuario y el nombre d ela imagen.
+// Salida: void
 
 void classification(matrixF *mf, int umbral, char *namefile){
 	int maxBlack = 0;

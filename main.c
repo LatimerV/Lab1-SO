@@ -53,6 +53,13 @@ matrixF *convertFilter(char **datefilter, int cont){
 	return filter;
 }
 
+
+// Funcion main: Funcion que toma por parametros los datos entrantes y pasa a la etapa de lectura,
+//la matriz del filtro para convulocion y el nombre de las imagenes.
+// 
+// Entrada: los parametros ingresados por el usuario.
+// Salida: Entero que representa fin de su ejecucion.
+
 int main(int argc, char *argv[]){
 
     char *cflag = (char*)malloc(100*sizeof(char));
