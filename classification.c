@@ -79,6 +79,9 @@ int main(int argc, char *argv[]){
   aqui iria la matriz para guardar el clasification*/ 
   matrixF *entrada;
   matrixF *salida;
+  
+  int fil, col;
+  float date;
 
   char imagenArchivo[40]; /*Nombre del archivo imagen_1.png*/
   int umbralClasificacion[1]; /*numero del umbral*/
@@ -104,7 +107,16 @@ int main(int argc, char *argv[]){
   read(3,imagenArchivo,sizeof(imagenArchivo));
   read(4,umbralClasificacion,sizeof(umbralClasificacion));
   /*falta aqui read de la imagen desde pooling*/
-  read(5, entrada,sizeof(matrixF) );
+  /*read(5, entrada,sizeof(matrixF) );*/
+  read(8, &fil, sizeof(fil));
+  read(9, &col, sizeof(col));
+  entrada = createMF(fil, col);
+  for (int y = 0; y < countFil(entrada); y++){
+	for (int x = 0; x < countColumn(entrada); x++){
+		read(7, &date, sizeof(date));
+		entrada = setDateMF( entrada, y, x, date);
+	}
+  }
 
   classification(entrada, umbralClasificacion[0],imagenArchivo );
   

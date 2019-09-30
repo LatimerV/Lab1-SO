@@ -69,7 +69,6 @@ int main(int argc, char *argv[]) {
 int main(int argc, char *argv[]){
   printf("\n lectura\n");
   matrixF *filter;
-  matrixF *entrada;
   matrixF *salida;
   
   int width, height, fil, col;
@@ -84,32 +83,38 @@ int main(int argc, char *argv[]){
 
   pid_t pid;
   int status;
-
+  
+  int pDateMatrix[2];
+  int pFilMatrix[2];
+  int pColMatrix[2];
+  int pDateFilter[2];
+  int pFilFilter[2];
+  int pColFilter[2];
 
   int pUmbral[2]; /*para pasar el umbral para clasificacion*/
   int pNombre[2]; /*Para pasar nombre imagen_1.png*/
-  int pFiltroConvolucion[2]; /*para pasar matrixFfiltro*/
   int pImagen[2]; /*para pasar la imagen de lectura*/
   /*Se crean los pipes*/
-  pipe(pFiltroConvolucion);
   pipe(pNombre);
   pipe(pUmbral);
   pipe(pImagen);
+  pipe(pDateMatrix);
+  pipe(pFilMatrix);
+  pipe(pColMatrix);
+  pipe(pDateFilter);
+  pipe(pFilFilter);
+  pipe(pColFilter);
   
   /*Se crea el proceso hijo.*/
   pid = fork();
   
   /*Es el padre*/
   if(pid>0){
-	 printf("matriz creada\n");
     read(3,imagenArchivo,sizeof(imagenArchivo));
     read(4,umbralClasificacion,sizeof(umbralClasificacion));
-	printf("matriz creada\n");
 	read(8, &fil, sizeof(fil));
 	read(9, &col, sizeof(col));
-	printf("matriz creada\n");
 	filter = createMF(fil, col);
-	printf("matriz creada\n");
 	for (int y = 0; y < countFil(filter); y++){
 		for (int x = 0; x < countColumn(filter); x++){
 			read(7, &date, sizeof(date));
@@ -117,16 +122,10 @@ int main(int argc, char *argv[]){
 		}
 	}
     /*read(5, &filter,2000*sizeof(filter));*/
-	for (int y2 = 0; y2 < countFil(filter); y2++){
-		for (int x2 = 0; x2 < countColumn(filter); x2++){
-			printf("%f ",getDateMF(filter,y2,x2));
-		}
-		printf("\n");
-	}
 	printf("lectura padre\n");
     
 
-    salida=leerPNG(imagenArchivo, entrada, width, height, color_type, bit_depth, row_pointers);
+    salida=leerPNG(imagenArchivo, salida, width, height, color_type, bit_depth, row_pointers);
     
 
 
@@ -136,11 +135,36 @@ int main(int argc, char *argv[]){
     close(pUmbral[0]);
     write(pUmbral[1],umbralClasificacion,sizeof(umbralClasificacion));
 	
-	close(pImagen[0]);
-    write(pImagen[1],salida,sizeof(matrixF));
-
-    close(pFiltroConvolucion[0]);
-    write(pFiltroConvolucion[1],&filter,sizeof(matrixF));
+	close(pDateFilter[0]);
+	close(pFilFilter[0]);
+	close(pColFilter[0]);
+	int filfilter = countFil(filter);
+	int colfilter = countColumn(filter);
+	write(pFilFilter[1], &filfilter, sizeof(filfilter));
+	write(pColFilter[1], &colfilter, sizeof(colfilter));
+	for (int y2 = 0; y2 < countFil(filter); y2++){
+		for (int x2 = 0; x2 < countColumn(filter); x2++){
+			float datefilter = getDateMF(filter, y2, x2);
+			write(pDateFilter[1], &datefilter, sizeof(datefilter));
+		}
+	}
+	
+	/*close(pImagen[0]);
+    write(pImagen[1],salida,sizeof(matrixF));*/
+	
+	close(pDateMatrix[0]);
+	close(pFilMatrix[0]);
+	close(pColMatrix[0]);
+	int filmatrix = countFil(salida);
+	int colmatrix = countColumn(salida);
+	write(pFilMatrix[1], &filmatrix, sizeof(filmatrix));
+	write(pColMatrix[1], &colmatrix, sizeof(colmatrix));
+	for (int y3 = 0; y3 < countFil(salida); y3++){
+		for (int x3 = 0; x3 < countColumn(salida); x3++){
+			float datematrix = getDateMF(salida, y3, x3);
+			write(pDateMatrix[1], &datematrix, sizeof(datematrix));
+		}
+	}
 
     waitpid(pid,&status,0);
 
@@ -155,10 +179,19 @@ int main(int argc, char *argv[]){
     close(pUmbral[1]);
     dup2(pUmbral[0],5);
 
-    close(pFiltroConvolucion[1]);
-    dup2(pFiltroConvolucion[0],6);
-
-
+	close(pDateFilter[1]);
+	dup2(pDateFilter[0], 7);
+	close(pFilFilter[1]);
+	dup2(pFilFilter[0], 8);
+	close(pColFilter[1]);
+	dup2(pColFilter[0], 9);
+	
+	close(pDateMatrix[1]);
+	dup2(pDateMatrix[0], 10);
+	close(pFilMatrix[1]);
+	dup2(pFilMatrix[0], 11);
+	close(pColMatrix[1]);
+	dup2(pColMatrix[0], 12);
 
     char *argvHijo[] = {"bidireccionalConvolution",NULL};
     execv(argvHijo[0],argvHijo);

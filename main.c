@@ -65,7 +65,6 @@ int main(int argc, char *argv[]){
 
     int pUmbral[2];
     int pNombre[2];
-    int pFiltroConvolucion[2];
     int status;
     pid_t pid;
 
@@ -146,7 +145,6 @@ int main(int argc, char *argv[]){
 	    /*Se crean los pipes*/
 	    pipe(pNombre); /*Para pasar el nombreImagen.*/
 	    pipe(pUmbral); /*Para pasar el umbral para clasificacion.*/
-	    pipe(pFiltroConvolucion); /*Para pasar el matrifxFiltroConvolucion.*/
 	    pipe(pDateMatrix);
 		pipe(pFilMatrix);
 		pipe(pColMatrix);
@@ -160,7 +158,6 @@ int main(int argc, char *argv[]){
 	      	write(pNombre[1],imagenArchivo,(strlen(imagenArchivo)+1));
 	      	close(pUmbral[0]); /*Se cierra la lectura*/
 	      	write(pUmbral[1],umbralClasificacion,sizeof(umbralClasificacion));
-	      	close(pFiltroConvolucion[0]); /*Se cierra la lectura*/
 			close(pDateMatrix[0]);
 			close(pFilMatrix[0]);
 			close(pColMatrix[0]);
@@ -174,7 +171,6 @@ int main(int argc, char *argv[]){
 					write(pDateMatrix[1], &datematrix, sizeof(datematrix));
 				}
 			}
-	      	write(pFiltroConvolucion[1], filter, countFil(filter) * countColumn(filter));
 	      	waitpid(pid,&status,0);
 
 	    }else{/*Es hijo*/
@@ -182,8 +178,6 @@ int main(int argc, char *argv[]){
 	      	dup2(pNombre[0],3);
 	      	close(pUmbral[1]); /*Se cierra la escritura*/
 	      	dup2(pUmbral[0],4);
-	      	close(pFiltroConvolucion[1]); /*Se cierra escritura*/
-	      	dup2(pFiltroConvolucion[0], 5);
 			
 			close(pDateMatrix[1]);
 	      	dup2(pDateMatrix[0], 7);
